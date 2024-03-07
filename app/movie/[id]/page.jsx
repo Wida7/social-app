@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import ContentDetails from "../../components/contentDetails/ContentDetails";
 
-export default function page() {
+export default function Page() {
   const params = useParams();
   const router = useRouter();
   const currentUser = useSelector((state) => state.store.user);

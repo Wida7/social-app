@@ -2,6 +2,26 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Aplicación que simula una pagina que provee información de peliculas, con inicio de sesión de usuarios, presentación de las peliculas disponibles y descripción de las peliculas.
+
+Construida con React.js, Next.js, Redux - toolkit, Api routes (public API with Next.js), tailwind y NextUI.
+
+Implementa el uso de: 
+    hooks: (useState, useEffect...), 
+    manejo de datos: (ReduxJS - Redux Toolkit), 
+    persistencia de datos: (Redux-persist), 
+    manejo de estilos: (Tailwind, NextUI), 
+    manejo de enrutamiento: (Pages router de Next.js).
+
+Uso de diferentes librerias: NextUI, Axios, React-hook-form, react-youtube, react-icons entre otras.
+
+usuarios: 
+    email: admin@movapp.com
+    password: admin
+
+    email: user@movapp.com
+    password: user
+
 First, run the development server:
 
 ```bash

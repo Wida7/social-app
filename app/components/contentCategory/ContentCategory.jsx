@@ -15,6 +15,7 @@ export default function ContentCategory({ movies, idCategory }) {
       {idCategory === 1
         ? movies?.map((movie) => (
             <div
+              key={movie.id}
               className="w-64"
               onClick={() => route.push(`/movie/${movie.id}`)}
             >
@@ -29,6 +30,7 @@ export default function ContentCategory({ movies, idCategory }) {
             ?.filter((movie) => movie.idCategory === idCategory)
             .map((movie) => (
               <div
+                key={movie.id}
                 className="w-64"
                 onClick={() => route.push(`/movie/${movie.id}`)}
               >

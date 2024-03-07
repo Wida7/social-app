@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import YouTube from "react-youtube";
 
@@ -13,11 +14,7 @@ export default function ContentDetails({ movie }) {
   return (
     <div className="flex flex-col sm:grid grid-cols-3 grid-rows-1 gap-2 mt-6 mx-8">
       <div className="flex flex-col items-center">
-        <img
-          src={movie?.image}
-          alt={movie?.title}
-          className="w-64 rounded-lg"
-        />
+        <Image src={movie?.image} alt={movie?.title} className="w-64 rounded-lg" width={600} height={600} />
       </div>
       <div className="col-span-2">
         <h2 className="text-3xl mb-4 mt-4 sm:mt-0 font-semibold">
