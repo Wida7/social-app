@@ -5,6 +5,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Aplicación que simula una pagina que provee información de peliculas, con inicio de sesión de usuarios, presentación de las peliculas disponibles y descripción de las peliculas.
 
 Construida con React.js, Next.js, Redux - toolkit, Api routes (public API with Next.js), tailwind y NextUI.
+Cuenta con despliegue continuo y hosting con AWS - Amplify mediante la conexión al repositorio.
+
+Enlace app: https://main.dar1vr8nzz57v.amplifyapp.com
+Repositorio: https://github.com/Wida7/movies-app.git
 
 Implementa el uso de: 
     hooks: (useState, useEffect...), 
