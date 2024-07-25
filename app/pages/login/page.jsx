@@ -1,14 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
-import Container from "../components/Container";
-import axios from "axios";
+import Container from "../../components/Container";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setMovies, setUser } from "../../store/slice";
+import { setUser } from "../../../store/slice";
+import { logInService, logInServiceGoogle } from "../../api/login/logIn"
+import { FcGoogle } from "react-icons/fc";
+
+
 
 export default function Login() {
   const router = useRouter();
@@ -18,41 +21,41 @@ export default function Login() {
   const { register, handleSubmit } = useForm();
 
   //=> Validación del campo email
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = useState("");
 
-  const validateEmail = (value) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
-  
+  const validateEmail = (value) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+
   const isInvalid = React.useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
   }, [email]);
 
+
   //=> Función para validar el inicio de sesión y setear las peliculas a Redux
   const onSubmit = (values) => {
-    axios
-      .post("/api/login", values)
-      .then((res) => {
-        if (res.data.Response === "No existe") {
-          return toast.error("No existe usuario");
-        }
+    //console.log(values.email, values.password);
 
-        try {
-          axios.get("/api/movies").then((response) => {
-            dispatch(setMovies(response.data));
-          });
-        } catch (error) {
-          console.log(error);
-        }
-
-        dispatch(setUser(res.data));
-        toast.success(`Bienvenido ${res.data.name}`);
-        router.push("/home");
-      })
-      .catch((error) => {
-        console.log(error);
-        throw new Error("Error en el servidor");
+      logInService(values.email, values.password).then((res) => {
+        //console.log(res);
+        toast.success(`Bienvenido ${res.name}`);
+        dispatch(setUser(res));
+        router.push("/pages/home");
+      }).catch((e) => {
+        console.log(e)
+        toast.error(`Correo o contraseña invalidos`);
       });
   };
+
+  const signInGoogle = () => {
+      logInServiceGoogle().then((res) => {
+        console.log(res);
+        toast.success(`Bienvenido ${res.name}`);
+        dispatch(setUser(res));
+        router.push("/pages/home");
+      }).catch((e) => {
+        console.log(e)
+      });
+  };  
 
   return (
     <Container>
@@ -90,7 +93,25 @@ export default function Login() {
             isInvalid ? "cursor-not-allowed" : ""
           }`}
         >
-          Iniciar sesión
+          Ingresar
+        </Button>
+        <Button
+          color="primary"
+          variant="bordered"
+          className={`w-1/2 hover:bg-white ${
+            isInvalid ? "cursor-not-allowed" : ""
+          }`}
+          onClick={() => signInGoogle()}
+        >
+          <FcGoogle />Ingresar con Google
+        </Button>        
+        <Button
+          color="primary"
+          variant="light"
+          className=""
+          onClick={() => router.push('/pages/register')}
+        >
+          Registrarse
         </Button>
       </form>
     </Container>

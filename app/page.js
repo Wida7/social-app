@@ -1,8 +1,9 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+
 
 export default function Home() {
 
@@ -12,9 +13,9 @@ export default function Home() {
 
   useEffect(() => {
     if (currentUser != null) {
-      return router.push('/home')
+      return router.push('/pages/home')
     }  else {
-      return router.push('/login')
+      return router.push('/pages/login')
     }
   }, [currentUser])
   

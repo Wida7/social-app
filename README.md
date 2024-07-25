@@ -8,7 +8,7 @@ Construida con React.js, Next.js, Redux - toolkit, Api routes (public API with N
 Cuenta con despliegue continuo y hosting con AWS - Amplify mediante la conexión al repositorio.
 
 Enlace app: https://main.dar1vr8nzz57v.amplifyapp.com
-Repositorio: https://github.com/Wida7/movies-app.git
+Repositorio: https://github.com/Wida7/social-app.git
 
 Implementa el uso de: 
     hooks: (useState, useEffect...), 
