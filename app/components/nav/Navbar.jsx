@@ -19,6 +19,7 @@ const caveat = Caveat({ subsets: ["latin"], weight: ["400"] });
 
 export default function Nav() {
   const currentUser = useSelector((state) => state.store.user);
+  const userlikes = useSelector((state) => state.store.userlikes);
   const dispatch = useDispatch();
 
   return (
@@ -51,10 +52,10 @@ export default function Nav() {
             <Button
               as={Link}
               onClick={() => {
-                dispatch(reset()), logOut();
+                dispatch(reset()), 
+                logOut(currentUser?.id, userlikes)
               }}
               color="primary"
-              href="/pages/login"
               variant="bordered"
               className="hover:bg-white hover:text-black hover:border-white"
             >

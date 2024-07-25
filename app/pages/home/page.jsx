@@ -1,27 +1,33 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Posts from "../../components/posts/Posts";
 import CreatePost from "../../components/posts/CreatePost";
 import { getPosts } from "../../api/posts/getPosts";
+import { getLikes } from "../../api/posts/likes"
+import { setLikes } from "../../../store/slice";
 
 export default function Home() {
   const router = useRouter();
   const currentUser = useSelector((state) => state.store.user);
+  const dispatch = useDispatch();
   const [dataPosts, setDataPosts] = useState(null);
 
   useEffect(() => {
-    if (currentUser != null) {
-      return router.push("/pages/home");
-    } else {
+    if (!currentUser) {
       return router.push("/pages/login");
     }
   }, [currentUser]);
 
+  //=> Obtengo los posts y los likes del usuario
   useEffect(() => {
     fetchPosts();
+    getLikes(currentUser?.id).then((res) => {
+      //console.log(res);
+      dispatch(setLikes(res))
+    })
   }, []);
   
   const fetchPosts = async () => {

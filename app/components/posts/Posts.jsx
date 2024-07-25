@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setLike } from "../../../store/slice";
 import { Avatar, Button } from "@nextui-org/react";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaHeartBroken } from "react-icons/fa";
 import Image from "next/image";
 import { Spinner } from "@nextui-org/react";
 import { doc, getFirestore, getDoc, updateDoc } from "firebase/firestore";
@@ -8,9 +10,12 @@ import firebaseApp from "../../firebase/credenciales";
 const firestore = getFirestore(firebaseApp);
 
 export default function Posts({ dataPosts, setDataPosts }) {
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.store.user);
+  const userlikes = useSelector((state) => state.store.userlikes);
   const [likesLoading, setLikesLoading] = useState({});
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, like) => {
     setLikesLoading((prev) => ({ ...prev, [postId]: true }));
 
     try {
@@ -18,10 +23,27 @@ export default function Posts({ dataPosts, setDataPosts }) {
       const postSnapshot = await getDoc(postRef);
 
       if (postSnapshot.exists) {
-        const newLikes = postSnapshot.data().likes + 1;
-        await updateDoc(postRef, { likes: newLikes });
 
-        // Actualiza el estado local para reflejar el cambio inmediatamente
+        //=> aumento o disminuyo el like del usuario
+        const newLikes = postSnapshot.data().likes + ( like ? 1 : -1 );
+
+        //=> Actualiza los likes del post
+        const existingUserlikes = postSnapshot.data().userslike || {};
+        console.log("POST", postSnapshot.data());
+        console.log("ANTERIORES", existingUserlikes);
+        const updatedUserlikes = {
+          ...existingUserlikes,
+          [currentUser.id]: like,
+        };
+        console.log("ACTUALIZADOS", updatedUserlikes);
+
+        await updateDoc(postRef, {
+          likes: newLikes,
+          userslike: updatedUserlikes,
+        });
+        dispatch(setLike({ postId, liked: like }));
+
+        //=> Actualiza el estado local para reflejar el cambio inmediatamente
         setDataPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id === postId ? { ...post, likes: newLikes } : post
@@ -32,6 +54,7 @@ export default function Posts({ dataPosts, setDataPosts }) {
       console.log(e);
     } finally {
       setLikesLoading((prev) => ({ ...prev, [postId]: false }));
+      console.log(userlikes);
     }
   };
 
@@ -83,18 +106,35 @@ export default function Posts({ dataPosts, setDataPosts }) {
                 )}
               </div>
               <div className="mt-2">
-                <Button
-                  color="danger"
-                  variant="light"
-                  onClick={() => handleLike(post.id)}
-                >
-                  Like <FaHeart />
-                  {likesLoading[post.id] ? (
-                    <Spinner color="danger" labelColor="danger" size="sm" />
-                  ) : (
-                    post.likes
-                  )}
-                </Button>
+                {userlikes[post.id] ? 
+                (
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onClick={() => handleLike(post.id, false)}
+                  >
+                    Dislike <FaHeartBroken />
+                    {likesLoading[post.id] ? (
+                      <Spinner color="danger" labelColor="danger" size="sm" />
+                    ) : (
+                      post.likes
+                    )}
+                  </Button>
+                ) :
+                (
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onClick={() => handleLike(post.id, true)}
+                  >
+                    Like <FaHeart />
+                    {likesLoading[post.id] ? (
+                      <Spinner color="danger" labelColor="danger" size="sm" />
+                    ) : (
+                      post.likes
+                    )}
+                  </Button>
+                )}
               </div>
             </div>
           );

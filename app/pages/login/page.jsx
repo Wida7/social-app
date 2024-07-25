@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import Container from "../../components/Container";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../../store/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setLike } from "../../../store/slice";
 import { logInService, logInServiceGoogle } from "../../api/login/logIn"
 import { FcGoogle } from "react-icons/fc";
 
@@ -16,12 +16,19 @@ import { FcGoogle } from "react-icons/fc";
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const currentUser = useSelector((state) => state.store.user);
   //=> form hook
   const { register, handleSubmit } = useForm();
 
   //=> Validación del campo email
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (currentUser) {
+      return router.push("/pages/home");
+    }
+  }, [currentUser]);
+
 
   const validateEmail = (value) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
 
@@ -48,7 +55,7 @@ export default function Login() {
 
   const signInGoogle = () => {
       logInServiceGoogle().then((res) => {
-        console.log(res);
+        //console.log(res);
         toast.success(`Bienvenido ${res.name}`);
         dispatch(setUser(res));
         router.push("/pages/home");

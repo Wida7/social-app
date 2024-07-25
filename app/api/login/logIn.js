@@ -44,7 +44,7 @@ export async function logInServiceGoogle(email, password) {
         return firebaseUser;
       }
     );
-    console.log(userInfo.user);
+    //console.log(userInfo.user);
 
     const docRef = await doc(firestore, `users/${userInfo.user.uid}`);
     const docSnap = await getDoc(docRef);
