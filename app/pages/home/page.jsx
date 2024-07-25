@@ -10,7 +10,6 @@ import { getPosts } from "../../api/posts/getPosts";
 export default function Home() {
   const router = useRouter();
   const currentUser = useSelector((state) => state.store.user);
-
   const [dataPosts, setDataPosts] = useState(null);
 
   useEffect(() => {
@@ -22,13 +21,13 @@ export default function Home() {
   }, [currentUser]);
 
   useEffect(() => {
-    fetchPosts()
+    fetchPosts();
   }, []);
-
+  
   const fetchPosts = async () => {
     getPosts().then((res) => {
-      setDataPosts(res)
-    })
+      setDataPosts(res);
+    });
   };
 
   const handleNewPost = async () => {
@@ -36,13 +35,15 @@ export default function Home() {
   };
 
   return (
-    <div className="
+    <div
+      className="
       flex flex-col 
       text-white 
       items-center 
       m-4"
     >
-      <div className="
+      <div
+        className="
         flex flex-col items-center 
         max-w-[900px] 
         w-[100%] 
@@ -53,7 +54,6 @@ export default function Home() {
       >
         <CreatePost handleNewPost={handleNewPost} />
         <Posts dataPosts={dataPosts} setDataPosts={setDataPosts} />
-        
       </div>
     </div>
   );

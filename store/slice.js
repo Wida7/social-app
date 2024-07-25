@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    user: null,
-    movies: null
+    user: null
 }
 
 export const Slice = createSlice({

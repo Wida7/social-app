@@ -99,9 +99,9 @@ export default function Posts({ dataPosts, setDataPosts }) {
             </div>
           );
         })
-      ) 
-      : <Spinner label="Cargando" color="primary" labelColor="primary" />
-      }
+      ) : (
+        <Spinner label="Cargando" color="primary" labelColor="primary" />
+      )}
     </>
   );
 }
