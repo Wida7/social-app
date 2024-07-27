@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setLike } from "../../../store/slice";
-import { Avatar, Button } from "@nextui-org/react";
+import { Avatar, Button, Divider } from "@nextui-org/react";
 import { FaHeart, FaHeartBroken } from "react-icons/fa";
 import Image from "next/image";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Skeleton } from "@nextui-org/react";
 import { doc, getFirestore, getDoc, updateDoc } from "firebase/firestore";
 import firebaseApp from "../../firebase/credenciales";
 const firestore = getFirestore(firebaseApp);
@@ -23,19 +23,18 @@ export default function Posts({ dataPosts, setDataPosts }) {
       const postSnapshot = await getDoc(postRef);
 
       if (postSnapshot.exists) {
-
         //=> aumento o disminuyo el like del usuario
-        const newLikes = postSnapshot.data().likes + ( like ? 1 : -1 );
+        const newLikes = postSnapshot.data().likes + (like ? 1 : -1);
 
         //=> Actualiza los likes del post
         const existingUserlikes = postSnapshot.data().userslike || {};
-        console.log("POST", postSnapshot.data());
-        console.log("ANTERIORES", existingUserlikes);
+        //console.log("POST", postSnapshot.data());
+        //console.log("ANTERIORES", existingUserlikes);
         const updatedUserlikes = {
           ...existingUserlikes,
           [currentUser.id]: like,
         };
-        console.log("ACTUALIZADOS", updatedUserlikes);
+        //console.log("ACTUALIZADOS", updatedUserlikes);
 
         await updateDoc(postRef, {
           likes: newLikes,
@@ -54,7 +53,7 @@ export default function Posts({ dataPosts, setDataPosts }) {
       console.log(e);
     } finally {
       setLikesLoading((prev) => ({ ...prev, [postId]: false }));
-      console.log(userlikes);
+      //console.log(userlikes);
     }
   };
 
@@ -105,42 +104,45 @@ export default function Posts({ dataPosts, setDataPosts }) {
                   <></>
                 )}
               </div>
-              <div className="mt-2">
-                {userlikes[post.id] ? 
-                (
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onClick={() => handleLike(post.id, false)}
-                  >
-                    Dislike <FaHeartBroken />
-                    {likesLoading[post.id] ? (
-                      <Spinner color="danger" labelColor="danger" size="sm" />
-                    ) : (
-                      post.likes
-                    )}
-                  </Button>
-                ) :
-                (
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onClick={() => handleLike(post.id, true)}
-                  >
-                    Like <FaHeart />
-                    {likesLoading[post.id] ? (
-                      <Spinner color="danger" labelColor="danger" size="sm" />
-                    ) : (
-                      post.likes
-                    )}
-                  </Button>
+              <Divider />
+              <div className="mt-2 flex items-center">
+                <Button
+                  color="danger"
+                  variant="light"
+                  onClick={() => handleLike(post.id, (userlikes[post.id] ? false : true))}
+                >
+                  {userlikes[post.id] ? (
+                    <>
+                      Dislike <FaHeartBroken />
+                    </>
+                  ) : (
+                    <>
+                      Like <FaHeart />
+                    </>
+                  )}
+                </Button>
+                <div className="w-[80px] ml-2 text-center">
+                {likesLoading[post.id] ? (
+                  <Spinner color="danger" labelColor="danger" size="sm" />
+                ) : (
+                  <p className=" text-danger">{post.likes} Likes</p>
                 )}
+                </div>
               </div>
             </div>
           );
         })
       ) : (
-        <Spinner label="Cargando" color="primary" labelColor="primary" />
+        <div className="max-w-[800px] w-full flex items-center gap-3 my-8">
+          <div>
+            <Skeleton className="flex rounded-full w-16 h-16" />
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <Skeleton className="h-4 w-3/5 rounded-lg" />
+            <Skeleton className="h-4 w-4/5 rounded-lg" />
+            <Skeleton className="h-4 w-5/5 rounded-lg" />
+          </div>
+        </div>
       )}
     </>
   );
