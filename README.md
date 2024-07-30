@@ -5,6 +5,7 @@ Aplicación web que simula una red social que permite regitrarse con un correo y
 Construida con React.js, Next.js, Redux - toolkit, firebase, tailwind y NextUI.
 
 Arquitectura por tipo de ficheros o directorios, separando: 
+
     - Componentes (/components)
     - Vistas o páginas (/pages)
     - Servicios (/api)
@@ -13,10 +14,11 @@ Arquitectura por tipo de ficheros o directorios, separando:
 
 Cuenta con despliegue continuo y hosting con AWS - Amplify mediante la conexión al repositorio:
 
-Enlace app: https://main.dq4zjh3oxxihe.amplifyapp.com/
-Repositorio: https://github.com/Wida7/social-app
+    -Enlace app: https://main.dq4zjh3oxxihe.amplifyapp.com/
+    -Repositorio: https://github.com/Wida7/social-app
 
 Implementa el uso de: 
+
     - Hooks: (useState, useEffect...).
     - Conexión y centralización de datos: (firebase - Redux Toolkit).
     - Persistencia de datos: (Redux-persist).
@@ -26,7 +28,9 @@ Implementa el uso de:
     - Manejo de errores.
     - Manejo de espera mientras cargan los componentes por medio de esqueletos y loaders.
 
-Uso de diferentes librerias: NextUI, React-hook-form, react-icons, firebase entre otras.
+Uso de diferentes librerias: 
+
+    NextUI, React-hook-form, react-icons, firebase entre otras.
 
 ## Install and execute repository
 
