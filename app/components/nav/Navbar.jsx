@@ -85,7 +85,7 @@ export default function Nav() {
       <ChangueAvatar
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        idUser={currentUser.id}
+        idUser={currentUser?.id}
       />
     </>
   );
