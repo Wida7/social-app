@@ -42,7 +42,7 @@ export default function Nav() {
         </NavbarBrand>
         <NavbarContent justify="end">
           {currentUser ? (
-            <>
+            <div className="flex gap-4 collapse md:visible items-center">
               <Avatar
                 isBordered
                 radius="lg"
@@ -58,7 +58,7 @@ export default function Nav() {
               >
                 {currentUser.name}
               </p>
-            </>
+            </div>
           ) : (
             <></>
           )}

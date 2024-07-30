@@ -98,7 +98,7 @@ export default function Login() {
           color="primary"
           variant="bordered"
           type="submit"
-          className={`w-1/2 hover:bg-white ${
+          className={`w-1/2 min-w-[200px] hover:bg-white ${
             isInvalid ? "cursor-not-allowed" : ""
           }`}
         >
@@ -107,7 +107,7 @@ export default function Login() {
         <Button
           color="primary"
           variant="bordered"
-          className={`w-1/2 hover:bg-white ${
+          className={`w-1/2 min-w-[200px] hover:bg-white ${
             isInvalid ? "cursor-not-allowed" : ""
           }`}
           onClick={() => signInGoogle()}
