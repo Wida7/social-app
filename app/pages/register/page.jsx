@@ -30,7 +30,7 @@ export default function Register() {
 
   //=> Función para validar el inicio de sesión por email/password
   const onSubmit = (values) => {
-    console.log(values.email, values.password, values.name);
+    //console.log(values.email, values.password, values.name);
     registerService(values.email, values.password, values.name)
       .then(() => {
         router.push("/pages/home");

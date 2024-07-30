@@ -23,7 +23,7 @@ export default function Posts({ dataPosts, setDataPosts, handleNewPost }) {
   const handleLike = async (postId, like, idCurrentUser, setDataPosts) => {
     setLikesLoading((prev) => ({ ...prev, [postId]: true }));
 
-    console.log(postId, like, idCurrentUser, setDataPosts);
+    //console.log(postId, like, idCurrentUser, setDataPosts);
     await addLike(postId, like, idCurrentUser, setDataPosts)
       .then((res) => {
         dispatch(setLike(res));
@@ -109,7 +109,7 @@ export default function Posts({ dataPosts, setDataPosts, handleNewPost }) {
                     </>
                   )}
                 </Button>
-                <div className="w-[80px] ml-2 text-center">
+                <div className="w-[80px] ml-1 text-center">
                   {likesLoading[post.id] ? (
                     <Spinner color="danger" labelColor="danger" size="sm" />
                   ) : (

@@ -37,7 +37,7 @@ export default function Nav() {
 
   return (
     <>
-      <Navbar isBlurred={false} className=" bg-transparent mb-4">
+      <Navbar className=" bg-transparent mb-4">
         <NavbarBrand>
           <Link href="/">
             <p
@@ -93,7 +93,7 @@ export default function Nav() {
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           />
         </NavbarContent>
-        <NavbarMenu className=" items-end">
+        <NavbarMenu className="bg-slate-900/80 items-end">
           <NavbarMenuItem className="mt-4">
             {currentUser ? (
               <div className="flex gap-4 items-center">
@@ -122,7 +122,7 @@ export default function Nav() {
               <Button
                 as={Link}
                 onClick={() => {
-                  dispatch(reset()), logOut(currentUser?.id, userlikes);
+                  dispatch(reset()), logOut(currentUser?.id, userlikes), setIsMenuOpen(false)
                 }}
                 color="primary"
                 variant="bordered"

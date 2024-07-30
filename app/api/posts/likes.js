@@ -39,8 +39,6 @@ export const addLike = async (postId, like, idCurrentUser, setDataPosts) => {
 
       //=> Actualiza los likes del post
       const existingUserlikes = postSnapshot.data().userslike || {};
-      //console.log("POST", postSnapshot.data());
-      //console.log("ANTERIORES", existingUserlikes);
       const updatedUserlikes = {
         ...existingUserlikes,
         [idCurrentUser]: like,
@@ -51,7 +49,6 @@ export const addLike = async (postId, like, idCurrentUser, setDataPosts) => {
         likes: newLikes,
         userslike: updatedUserlikes,
       });
-      //dispatch(setLike({ postId, liked: like }));
 
       //=> Actualiza el estado local para reflejar el cambio inmediatamente
       setDataPosts((prevPosts) =>

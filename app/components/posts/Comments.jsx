@@ -53,7 +53,7 @@ export default function Comments({ comments, idPost, handleNewPost }) {
 
   return (
     <>
-      <Button className="group" onPress={onOpen} color="primary" variant="light">
+      <Button className="group hidden sm:flex" onPress={onOpen} color="primary" variant="light">
         Comentarios <TfiCommentAlt className="group-hover:animate-bounce" size={18} />
       </Button>
       <p
