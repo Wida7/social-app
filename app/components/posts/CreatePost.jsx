@@ -24,7 +24,7 @@ export default function CreatePost({ handleNewPost }) {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (values) => {
-    console.log(values.description);
+    //console.log(values.description);
 
     const dataPost = {
       description: values.description,
@@ -35,8 +35,8 @@ export default function CreatePost({ handleNewPost }) {
 
     addPost(dataPost)
       .then((res) => {
-        console.log(res);
-        //setImage64("");
+        //console.log(res);
+        setImage64("");
         toast.success("Publicación creada con exito");
         handleNewPost();
       })

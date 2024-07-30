@@ -11,8 +11,8 @@ import {
   Avatar,
   useDisclosure,
 } from "@nextui-org/react";
-import { useSelector } from "react-redux";
-import { reset, setNewAvatar } from "../../../store/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { reset } from "../../../store/slice";
 import { Caveat } from "next/font/google";
 import { logOut } from "../../api/logout/logOut";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ const caveat = Caveat({ subsets: ["latin"], weight: ["400"] });
 export default function Nav() {
   const currentUser = useSelector((state) => state.store.user);
   const userlikes = useSelector((state) => state.store.userlikes);
+  const dispatch = useDispatch();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const route = useRouter();

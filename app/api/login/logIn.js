@@ -9,7 +9,6 @@ import {
   getFirestore,
   doc,
   getDoc,
-  updateDoc,
   setDoc,
 } from "firebase/firestore";
 import { getUserInfo } from "../user/getUserInfo";
@@ -27,6 +26,8 @@ export async function logInService(email, password) {
       password
     ).then((firebaseUser) => {
       return firebaseUser;
+    }).catch((error) => {
+      return console.log(error)
     });
 
     const userObjectFormat = await userObject(userInfo.user.uid, userInfo);

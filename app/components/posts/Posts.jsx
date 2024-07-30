@@ -23,6 +23,7 @@ export default function Posts({ dataPosts, setDataPosts, handleNewPost }) {
   const handleLike = async (postId, like, idCurrentUser, setDataPosts) => {
     setLikesLoading((prev) => ({ ...prev, [postId]: true }));
 
+    console.log(postId, like, idCurrentUser, setDataPosts);
     await addLike(postId, like, idCurrentUser, setDataPosts)
       .then((res) => {
         dispatch(setLike(res));

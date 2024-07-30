@@ -42,9 +42,13 @@ export default function Login() {
     logInService(values.email, values.password)
       .then((res) => {
         //console.log(res);
-        toast.custom((t) => <Notification t={t} data={res} />);
-        dispatch(setUser(res));
-        router.push("/pages/home");
+        if (res) {
+          toast.custom((t) => <Notification t={t} data={res} />);
+          dispatch(setUser(res));
+          router.push("/pages/home");
+        } else {
+          toast.error("Credenciales invalidas");
+        }
       })
       .catch((e) => {
         console.log(e);
