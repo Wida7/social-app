@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -10,6 +10,9 @@ import {
   Button,
   Avatar,
   useDisclosure,
+  NavbarMenuToggle,
+  NavbarMenuItem,
+  NavbarMenu,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { reset } from "../../../store/slice";
@@ -24,14 +27,17 @@ const caveat = Caveat({ subsets: ["latin"], weight: ["400"] });
 export default function Nav() {
   const currentUser = useSelector((state) => state.store.user);
   const userlikes = useSelector((state) => state.store.userlikes);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const route = useRouter();
 
+  const menuItems = ["Log Out"];
+
   return (
     <>
-      <Navbar className=" bg-transparent mb-4">
+      <Navbar isBlurred={false} className=" bg-transparent mb-4">
         <NavbarBrand>
           <Link href="/">
             <p
@@ -41,7 +47,8 @@ export default function Nav() {
             </p>
           </Link>
         </NavbarBrand>
-        <NavbarContent justify="end">
+
+        <NavbarContent className="sm:flex gap-4" justify="end">
           {currentUser ? (
             <div className="flex gap-4 collapse md:visible items-center">
               <Avatar
@@ -63,7 +70,7 @@ export default function Nav() {
           ) : (
             <></>
           )}
-          <NavbarItem>
+          <NavbarItem className="hidden sm:flex">
             {currentUser != null ? (
               <Button
                 as={Link}
@@ -81,6 +88,53 @@ export default function Nav() {
             )}
           </NavbarItem>
         </NavbarContent>
+        <NavbarContent className="sm:hidden" justify="end">
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          />
+        </NavbarContent>
+        <NavbarMenu className=" items-end">
+          <NavbarMenuItem className="mt-4">
+            {currentUser ? (
+              <div className="flex gap-4 items-center">
+                <Avatar
+                  isBordered
+                  radius="lg"
+                  className="hover:cursor-pointer"
+                  src={currentUser.avatar}
+                  onClick={onOpen}
+                />
+                <p
+                  className="mr-2 hover:cursor-pointer"
+                  onClick={() => {
+                    route.push(`/pages/profile/${currentUser.id}`);
+                  }}
+                >
+                  {currentUser.name}
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
+          </NavbarMenuItem>
+          <NavbarMenuItem className="mt-4">
+            {currentUser != null ? (
+              <Button
+                as={Link}
+                onClick={() => {
+                  dispatch(reset()), logOut(currentUser?.id, userlikes);
+                }}
+                color="primary"
+                variant="bordered"
+                className="hover:bg-white hover:text-black hover:border-white"
+              >
+                CERRAR SESIÓN
+              </Button>
+            ) : (
+              <></>
+            )}
+          </NavbarMenuItem>
+        </NavbarMenu>
       </Navbar>
 
       <ChangueAvatar
