@@ -12,6 +12,10 @@ export const Slice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload
         },
+        setNewAvatar: (state, action) => {
+            //console.log("Ingresa aquí", action.payload);
+            state.user = {...state.user, avatar: action.payload};
+        },
         setLike: (state, action) => {
             const { postId, liked } = action.payload;
             state.userlikes = { ...state.userlikes, [postId]: liked };
@@ -27,5 +31,6 @@ export const {
     setUser,
     setLike,
     setLikes,
+    setNewAvatar,
     reset,
 } = Slice.actions

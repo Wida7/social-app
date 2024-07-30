@@ -12,31 +12,32 @@ import {
   updateDoc,
   setDoc,
 } from "firebase/firestore";
+import { getUserInfo } from "../user/getUserInfo";
 
 const auth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
 const provider = new GoogleAuthProvider();
 
-//=> Función para verificar inicio de sesión en firebase
+//=> Función para verificar inicio de sesión en firebase con email/contraseña
 export async function logInService(email, password) {
-  const userInfo = await signInWithEmailAndPassword(auth, email, password).then(
-    (firebaseUser) => {
+  try {
+    const userInfo = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    ).then((firebaseUser) => {
       return firebaseUser;
-    }
-  );
+    });
 
-  const userInfoFS = await getUserInfo(userInfo.user.uid);
+    const userObjectFormat = await userObject(userInfo.user.uid, userInfo);
 
-  const currentUser = {
-    email: userInfo.user.email,
-    name: auserInfoFS.name,
-    id: userInfo.user.uid,
-    avatar: userInfoFS.avatar,
-  };
-
-  return currentUser;
+    return userObjectFormat;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
+//=> Función para verificar inicio de sesión en firebase con cuenta de Google
 export async function logInServiceGoogle(email, password) {
   try {
     const userInfo = await signInWithPopup(auth, provider).then(
@@ -49,34 +50,32 @@ export async function logInServiceGoogle(email, password) {
     const docRef = await doc(firestore, `users/${userInfo.user.uid}`);
     const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      await updateDoc(docRef, { avatar: userInfo.user.photoURL });
-    } else {
+    if (!docSnap.exists()) {
       await setDoc(docRef, {
         name: userInfo.user.displayName,
         avatar: userInfo.user.photoURL,
       });
     }
 
-    const userInfoFS = await getUserInfo(userInfo.user.uid);
+    const userObjectFormat = await userObject(userInfo.user.uid, userInfo);
 
-    const currentUser = {
-      email: userInfo.user.email,
-      name: userInfoFS.name,
-      id: userInfo.user.uid,
-      avatar: userInfoFS.avatar,
-    };
-
-    return currentUser;
+    return userObjectFormat;
   } catch (e) {
     console.log(e);
   }
 }
 
-async function getUserInfo(uid) {
-  const docRef = doc(firestore, `users/${uid}`);
-  const docuCif = await getDoc(docRef);
-  const res = docuCif.data();
 
-  return res;
-}
+//=> Función para darle formato al objeto usuario
+const userObject = async (uid, data) => {
+  const info = await getUserInfo(uid);
+
+  const currentUser = {
+    email: data.user.email,
+    name: info.name,
+    id: data.user.uid,
+    avatar: info.avatar,
+  };
+
+  return currentUser;
+};

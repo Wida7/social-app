@@ -7,14 +7,13 @@ import Container from "../../components/Container";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { registerService } from "../../api/register/register"
-import { logInServiceGoogle } from "../../api/login/logIn"
+import { registerService } from "../../api/register/register";
+import { logInServiceGoogle } from "../../api/login/logIn";
 import { FcGoogle } from "react-icons/fc";
 import { setUser } from "../../../store/slice";
+import { validateEmail } from "../../utils/validateEmail";
 
-
-
-export default function Login() {
+export default function Register() {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -24,33 +23,37 @@ export default function Login() {
   //=> Validación del campo email
   const [email, setEmail] = useState("");
 
-  const validateEmail = (value) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
   const isInvalid = React.useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
   }, [email]);
 
-
-  //=> Función para validar el inicio de sesión y setear las peliculas a Redux
+  //=> Función para validar el inicio de sesión por email/password
   const onSubmit = (values) => {
     console.log(values.email, values.password, values.name);
-      registerService(values.email, values.password, values.name).then(() => {
+    registerService(values.email, values.password, values.name)
+      .then(() => {
         router.push("/pages/home");
-      }).catch((e) => console.log(e));
+      })
+      .catch((e) => {
+        toast.error(e.code)
+        console.log(e)
+      });
   };
 
+  //=> Función para validar el inicio de sesión por cuenta de Google
   const signInGoogle = () => {
-    logInServiceGoogle().then((res) => {
-      console.log(res);
-      toast.success(`Bienvenido ${res.name}`);
-      dispatch(setUser(res));
-      router.push("/pages/home");
-    }).catch((e) => {
-      console.log(e)
-    });
-};    
+    logInServiceGoogle()
+      .then((res) => {
+        console.log(res);
+        toast.success(`Bienvenido ${res.name}`);
+        dispatch(setUser(res));
+        router.push("/pages/home");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <Container>
@@ -104,18 +107,16 @@ export default function Login() {
         <Button
           color="primary"
           variant="bordered"
-          className={`hover:bg-white ${
-            isInvalid ? "cursor-not-allowed" : ""
-          }`}
+          className={`hover:bg-white ${isInvalid ? "cursor-not-allowed" : ""}`}
           onClick={() => signInGoogle()}
         >
           <FcGoogle /> Registrarse con Google
-        </Button>         
+        </Button>
         <Button
           color="primary"
           variant="light"
           className=""
-          onClick={() => router.push('/pages/login')}
+          onClick={() => router.push("/pages/login")}
         >
           Iniciar sesión
         </Button>

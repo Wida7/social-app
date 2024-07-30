@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import Container from "../../components/Container";
@@ -8,10 +8,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setLike } from "../../../store/slice";
-import { logInService, logInServiceGoogle } from "../../api/login/logIn"
+import { logInService, logInServiceGoogle } from "../../api/login/logIn";
 import { FcGoogle } from "react-icons/fc";
-
-
+import Notification from "../../components/notification/Notification";
+import { validateEmail } from "../../utils/validateEmail";
 
 export default function Login() {
   const router = useRouter();
@@ -23,46 +23,48 @@ export default function Login() {
   //=> Validación del campo email
   const [email, setEmail] = useState("");
 
+  //=> Valido si ya hay un usuario loggeado actualmente
   useEffect(() => {
     if (currentUser) {
       return router.push("/pages/home");
     }
   }, [currentUser]);
 
-
-  const validateEmail = (value) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
-  const isInvalid = React.useMemo(() => {
+  //=> Valido el calor del campo de email por medio de función en utils
+  const isInvalid = useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
   }, [email]);
 
-
-  //=> Función para validar el inicio de sesión y setear las peliculas a Redux
+  //=> Manejo de la función de login email y password
   const onSubmit = (values) => {
     //console.log(values.email, values.password);
-
-      logInService(values.email, values.password).then((res) => {
+    logInService(values.email, values.password)
+      .then((res) => {
         //console.log(res);
-        toast.success(`Bienvenido ${res.name}`);
+        toast.custom((t) => <Notification t={t} data={res} />);
         dispatch(setUser(res));
         router.push("/pages/home");
-      }).catch((e) => {
-        console.log(e)
+      })
+      .catch((e) => {
+        console.log(e);
         toast.error(`Correo o contraseña invalidos`);
       });
   };
 
+  //=> Manejo login por cuanta de Coogle
   const signInGoogle = () => {
-      logInServiceGoogle().then((res) => {
+    logInServiceGoogle()
+      .then((res) => {
         //console.log(res);
-        toast.success(`Bienvenido ${res.name}`);
+        toast.custom((t) => <Notification t={t} data={res} />);
         dispatch(setUser(res));
         router.push("/pages/home");
-      }).catch((e) => {
-        console.log(e)
+      })
+      .catch((e) => {
+        console.log(e);
       });
-  };  
+  };
 
   return (
     <Container>
@@ -110,13 +112,14 @@ export default function Login() {
           }`}
           onClick={() => signInGoogle()}
         >
-          <FcGoogle />Ingresar con Google
-        </Button>        
+          <FcGoogle />
+          Ingresar con Google
+        </Button>
         <Button
           color="primary"
           variant="light"
           className=""
-          onClick={() => router.push('/pages/register')}
+          onClick={() => router.push("/pages/register")}
         >
           Registrarse
         </Button>

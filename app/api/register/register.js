@@ -5,10 +5,8 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 const auth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
 
-
 //=> Función para registrar el usuario en firebase
 export async function registerService(email, password, name) {
-  
   const userInfo = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -18,7 +16,7 @@ export async function registerService(email, password, name) {
   });
 
   const docRef = doc(firestore, `users/${userInfo.user.uid}`);
-  setDoc(docRef, { name: name, avatar: "" });
+  setDoc(docRef, { name: name, avatar: "", likes: [] });
 
   return userInfo;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import {
@@ -14,6 +14,7 @@ import {
 import { MdOutlinePostAdd, MdAddPhotoAlternate } from "react-icons/md";
 import { addPost } from "../../api/posts/createPost";
 import toast from "react-hot-toast";
+import { imageToBase64 } from "../../utils/imageToBase64";
 
 export default function CreatePost({ handleNewPost }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -22,7 +23,6 @@ export default function CreatePost({ handleNewPost }) {
   //=> form hook
   const { register, handleSubmit } = useForm();
 
-  //=> Función para validar el inicio de sesión y setear las peliculas a Redux
   const onSubmit = (values) => {
     console.log(values.description);
 
@@ -36,7 +36,7 @@ export default function CreatePost({ handleNewPost }) {
     addPost(dataPost)
       .then((res) => {
         console.log(res);
-        setImage64("");
+        //setImage64("");
         toast.success("Publicación creada con exito");
         handleNewPost();
       })
@@ -46,13 +46,15 @@ export default function CreatePost({ handleNewPost }) {
       });
   };
 
-  const handleImageUpload = (event) => {
+  //=> Función para convertir la imagen en base64
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage64(reader.result); // reader.result es la imagen en base64
-    };
-    reader.readAsDataURL(file);
+    try {
+      const imageBase64 = await imageToBase64(file);
+      setImage64(imageBase64);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -66,7 +68,8 @@ export default function CreatePost({ handleNewPost }) {
         my-2"
       >
         <Button className=" self-start" onPress={onOpen} color="primary">
-          <MdOutlinePostAdd size={20} /> Crea una nueva publicación!
+          <MdOutlinePostAdd className="animate-bounce" size={20} />
+          Crea una nueva publicación!
         </Button>
       </div>
 
@@ -88,8 +91,8 @@ export default function CreatePost({ handleNewPost }) {
                     variant="bordered"
                   />
                   <p className="flex items-center mt-6">
-                    <MdAddPhotoAlternate size={18} /> Selecciona una imagen
-                    (opcional)
+                    <MdAddPhotoAlternate className="mr-2" size={18} />{" "}
+                    Selecciona una imagen (opcional)
                   </p>
                   <input
                     {...register("image")}
