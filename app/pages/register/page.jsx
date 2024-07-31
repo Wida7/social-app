@@ -88,7 +88,7 @@ export default function Register() {
           {...register("name")}
           isRequired
           type="text"
-          maxLength={25}
+          maxLength={40}
           label="Nombre de usuario"
           variant="bordered"
           color="default"

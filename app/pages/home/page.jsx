@@ -16,6 +16,7 @@ export default function Home() {
   const router = useRouter();
   const currentUser = useSelector((state) => state.store.user);
   const dispatch = useDispatch();
+  const hasFetched = useRef(false);
 
   const [dataPosts, setDataPosts] = useState([]);
   //=> Estados para controlar la carga de posts dependiendo scroll del usuario
@@ -31,7 +32,9 @@ export default function Home() {
 
   //=> UseEffect especifico para cuando el usuario cambie de foto de perfil, actualizar los posts del ususario
   useEffect(() => {
-    loadMorePosts(true);
+    if (hasFetched.current) {
+      loadMorePosts(true);
+    }
   }, [currentUser?.avatar]);
 
   //=> funcionalidad para cargar por partes los post y no todos de golpe
@@ -60,7 +63,6 @@ export default function Home() {
   };
 
   //=> Evitar doble fetch en entorno de desarollo
-  const hasFetched = useRef(false);
   useEffect(() => {
     if (!hasFetched.current) {
       hasFetched.current = true;
