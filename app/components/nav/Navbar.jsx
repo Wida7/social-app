@@ -59,7 +59,7 @@ export default function Nav() {
                 onClick={onOpen}
               />
               <p
-                className="mr-2 hover:cursor-pointer"
+                className="mr-2 hover:cursor-pointer  hover:text-blue-500"
                 onClick={() => {
                   route.push(`/pages/profile/${currentUser.id}`);
                 }}
@@ -122,7 +122,9 @@ export default function Nav() {
               <Button
                 as={Link}
                 onClick={() => {
-                  dispatch(reset()), logOut(currentUser?.id, userlikes), setIsMenuOpen(false)
+                  dispatch(reset()),
+                    logOut(currentUser?.id, userlikes),
+                    setIsMenuOpen(false);
                 }}
                 color="primary"
                 variant="bordered"

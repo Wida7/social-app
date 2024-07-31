@@ -11,7 +11,6 @@ import { formatDate } from "../../utils/formatDate";
 import { addLike } from "../../api/posts/likes";
 import { useRouter } from "next/navigation";
 
-
 export default function Posts({ dataPosts, setDataPosts, handleNewPost }) {
   const route = useRouter();
   const dispatch = useDispatch();
@@ -51,9 +50,16 @@ export default function Posts({ dataPosts, setDataPosts, handleNewPost }) {
               key={id}
             >
               <div className="flex items-center justify-between" key={id}>
-                <div className="flex items-center hover:cursor-pointer" onClick={() => {route.push(`/pages/profile/${post.userId}`) }}>
-                  <Avatar src={post.avatar} />
-                  <p className="ml-4 self-left">{post.name}</p>
+                <div
+                  className="flex items-center hover:cursor-pointer"
+                  onClick={() => {
+                    route.push(`/pages/profile/${post.userId}`);
+                  }}
+                >
+                  <Avatar src={post.avatar} size="lg" />
+                  <p className="ml-4 self-left text-blue-500 text-[18px] hover:opacity-75">
+                    {post.name}
+                  </p>
                 </div>
                 <div className="flex items-center">
                   <p className="mr-4 text-slate-400">{formatDate(post.date)}</p>
